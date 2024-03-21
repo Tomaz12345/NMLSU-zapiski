@@ -220,6 +220,224 @@
 
 
 
+% 1. predavanje 20.2.
+
+\chapter{Klasična teorija}
+
+
+\section{Sistemi upravljanja}
+
+Imamo dinamični sistem, sestavljen iz več komponent. \\
+% skica
+Stanje sistema opisujejo notranje spremenljivke, nanj vplivamo (upravljamo, vodimo) z vhodom $u(t)$,
+opazujemo pa lahko izhod $y(t)$. \\
+Vhodno-izhodna oblika. \\
+$t:$ čas, \\
+$u(t) \in \R^m$, \\
+$y(t) \in \R^r$, \\
+$x(t) \in \R^n$, \\
+$n >> m, r$. \\
+Upravljanje običajno poteka preko krmilnika (regulatorja). \\
+% skica
+Sisteme ločimo na
+\begin{enumerate}[label=\alph*)]
+  \item odprtozančne in
+  \item zaprtozančne.
+\end{enumerate}
+Pri odprtozančnih sistemih krnilnik ni povezan z izhodom (stanjem) sistema. \\
+Npr.
+\begin{enumerate}[label=-]
+  \item ročna klimatska naprava,
+  \item stari parni stroji,
+  \item glasbene skrinjice,
+  \item svetilnik.
+\end{enumerate}
+Pri zaprtozančnih sistemih imamo še povratno zvezo s stanjem ali izhodom sistema. \\
+% skica
+Zgledi:
+\begin{itemize}[label=-]
+  \item avtomatska klimatska naprava,
+  \item tempomat,
+  \item avtopilot,
+  \item kotliček za izplakovanje,
+  \item Wattov regulator parnega stroja.
+\end{itemize}
+% skica
+Manj pretoka $\implies$ počasneje, več pretoka $\implies$ hitreje.
+
+
+\section{Lastnosti sistemov}
+
+Splošni dinamični sistem lahko predstavimo s pomočno preslikave iz vhodnih funkcij v izhodne funkcije. \\
+Vpeljimo naslednje oznake: \\
+$T$: časovni prostor, urejena podmnožica $\R$, \\
+$U$: vhodni prostor, množica vseh možnih stanj vhoda, $\subset \R^m$, \\
+$\Omega \subset \{u: T \to U\}$: prostor vseh možnih vhodnih funkcij, \\
+$X$: prostor stanj, množica vseh možnih stanj sistema, $\subset \R^n$. \\
+Če ima sistem izhod, imamo še \\
+$Y$: izhodni prostor, množica vseh možnih stanj izhoda, $\subset \R^r$, \\
+$\Gamma \subset \{y: T \to Y\}$: prostor vseh izhodnih funkcij. \\
+$\Omega$ mora biti neprazen in za $t_1 < t_2 < t_3$ iz $T$ in poljubni $u_1, u_2 \in \Omega$ mora obstajati $u_3 \in \Omega$:
+\begin{equation*}
+  u_3(t) = \begin{cases*}
+    u_1(t), & za $t_1 \leq t \leq t_2$ \\
+    u_2(t), & za $t_2 \leq t \leq t_3$
+  \end{cases*}
+\end{equation*}
+Naš sistem opisuje preslikavo stanja \\
+$\phi: T \times T \times X \times \Omega \to X$, kjer je \\
+$\phi(t_1, t_0, x_0, u)$ stanje sistema $x(t_1)$ v času $t_1 \in T$, ki nastane iz začetnega stanja $x_0 \in X$
+v času $t_0 \in T$ pod vplivom vhodne funkcije $u \in \Omega$. \\
+$\phi$ mora biti dobro definirana za $t_1 \geq t_0$, ne pa tudi za $t_1 < t_0$. \\
+Za $\phi$ mora veljati:
+\begin{enumerate}[label=\alph*)]
+  \item lastnost identitete: $\phi(t_0, t_0, x_0, u) = x_0 \;$ $\forall t_0 \in T, \forall x_0 \in x, \forall u \in \Omega$,
+  \item lastnost podgrupe: $t_0 \leq t_1 \leq t_2 \in T: \;$ $\phi(t_2, t_0, x_0, u)
+    = \phi(t_2, t_1, \phi(t_1, t_0, x_0, u), u)$.
+\end{enumerate}
+% skica
+Če ima sistem izhod, obstaja še preslikava \\
+$\psi: T \times X \times U \to Y$, da je \\
+$y(t) = \psi(t, x(t), u(t))$ stanje izhoda v času $t$. \\
+$\to$ izhod je odvisen samo od trenutnega stanja sistema in vhoda v času $t$ in časa $t$.
+\begin{defn}
+  Sistem je vzorčen, če je za poljuben $t_1 \in T$ velja: \\
+  Če za $u_1, u_2 \in \Omega$ velja $u_1(t) = u_2(t)$ za $\forall t \leq t_1$, potem je \\
+  $\phi(t_1, t_0, x_0, u_1) = \phi(t_1, t_0, x_0, u_2)$ za $\forall t_0 \leq t_1 \in T, \forall x_0 \in X$.
+\end{defn}
+Vzročnost pomeni, da je stanje sistema odvisno samo od prejšnjih ali sedanjih vrednosti vhoda.
+\begin{defn}
+    Naj bosta $\Omega$ in $X$ vektorska prostora.
+    Sistem je linearen, če je za $\forall t_0 \leq t_1 \in T$ funkcija $\phi(t_1, t_0, ., .)$ linearna.
+\end{defn}
+$\phi(t_1, t_0, \alpha_1 x_1 + \alpha_2 x_2, \alpha_1 u_1 + \alpha_2 u_2)
+= \alpha_1 \phi(t_1, t_0, x_1, u_1) + \alpha_2 \phi(t_1, t_0, x_2, u_2)$ \\
+$\alpha_1 \begin{bmatrix} x_1 \\ u_1 \end{bmatrix} + \alpha_2 \begin{bmatrix} x_2 \\ u_2 \end{bmatrix}
+= \begin{bmatrix} \alpha_1 x_1 + \alpha_2 x_2 \\ \alpha_1 x_1 + \alpha_2 u_2 \end{bmatrix}$ \\
+za $\forall x_1, x_2 \in X, \forall u_1, u_2 \in \Omega$, skalarja $\alpha_1, \alpha_2$. \\
+Če ima sistem izhod, mora biti $y$ vektorski prostor in $\psi(t, ., .)$ linearna za $\forall t \in T$. \\
+Če je sistem linearen, iz
+\begin{equation*}
+    \begin{bmatrix} x_0 \\ u \end{bmatrix} = 1 \cdot \begin{bmatrix} x_0 \\ 0 \end{bmatrix}
+    + 1 \cdot \begin{bmatrix} 0 \\ u \end{bmatrix}
+\end{equation*}
+dobimo
+\begin{equation*}
+    \phi(t_1, t_0, x_0, u) = \phi(t_1, t_0, x_0, 0) + \phi(t_1, t_0, 0, u);
+\end{equation*}
+$\phi(t_1, t_0, x_0, 0)$: odziv na ničelni vhod (zero input response), \\
+$\phi(t_1, t_0, 0, u)$: odziv z ničelnim stanjem (zero state response). \\
+% skica
+\begin{lemma}
+    Če je sistem linearen, je vzorčnost ekvivalentna pravilu začetnega mirovanje (p.z.m.).
+\end{lemma}
+Če za $u \in \Omega$ velja $u(t) = 0 \; \forall t \leq t_1$, potem je $\phi(t_1, t_0, 0, u) = 0 \; \forall t_0 \leq t_1$.
+\begin{pro} \text{} \\
+    $(\Rightarrow):$ \\
+        Denimo, da sistem ne zadošča p.z.m. \\
+        Torej $\exists \tilde{u} \in \Omega$, $\tilde{u} = 0$ za $t \leq t_1$
+        in za nek $t_0 \leq t_1$ je $\phi(t_1, t_0 0, \tilde{u}) \neq 0$. \\
+        Potem za poljubne $u$ in $x_0$ velja \\
+        $\phi(t_1, t_0, x_0, u + \tilde{u}) \neq \phi(t_1, t_0, x_0, u)$,
+        toda $u + \tilde{u}$ in $u$ se ujemata na $t \leq t_1$. \\
+        $\implies$ sistem ni vzročen. \\
+    $(\Leftarrow)$: \\
+        Če sistem ni vzročen, $\exists u_1$ in $u_2$, ki se ujemata na $t \leq t_1$ in \\
+        $\phi(t_1, t_0, x_0, u_1) \neq \phi(t_1, t_0, x_0, u_2)$. \\
+        $\implies$ če vzamemo $\tilde{u} = u_1 - u_2$, je $\tilde{u} = 0$ na $t \leq t_1$ in $\phi(t_1, t_0, 0, \tilde{u}) \neq 0$.
+\end{pro}
+\begin{lemma}
+    Če je sistem linearen, je $\phi(t_1, t_0, 0, 0) = 0$.
+\end{lemma}
+\begin{pro}
+    $\phi(t_1, t_0, \alpha x_0, \alpha u) = \alpha \phi(t_1, t_0, x_0, u)$, vstavimo $\alpha = 0$.
+\end{pro}
+% skica
+Za $\sigma \in T$ definiramo operator premika: $u \to u^{\sigma}$, kjer je $u^{\sigma}(t) = u(t - \sigma)$. \\
+Velja naj, da je $T$ aditivna grupa in $\Omega$ zaprta za operator premika za \\
+$\forall \sigma \in T$.
+\begin{defn}
+    Pravimo, da je sistem časovno nespremenljiv (time invariant), če za
+    $\forall t_0 \leq t_1 \in T, \forall x_0 \in X, \forall u \in \Omega, \forall \sigma \in T$:
+    \begin{equation*}
+        x(t_1) := \phi(t_1, t_0, x_0, u) = \phi(t_1 + \sigma, t_0 + \sigma, x_0, u^{\sigma}) =: x^{\sigma}(t_1).
+    \end{equation*}
+\end{defn}
+Če ima izhod, mora biti $\phi$ neodvisna od $t$.
+\begin{exmp} \text{} \\
+    \begin{center}
+        \begin{tabular}{c | c c c}
+             & vzorčen & linearen & časovno invarianten \\
+            \hline
+            $x(t) = u^2(t-1)$ & ja & ne & ja \\
+            $x(t) = u(-t)$ & ne & ja & ne \\
+            $x(t) = 3^{-t} u(t-1)$ & ja & ja & ne
+        \end{tabular}
+    \end{center}
+\end{exmp}
+Mi se bomo ukvarjali z vzorčnimi LTI (linearen + časovno invarianten) sistemi.
+Ukvarjali se bomo z naslednjimi oblikami vzorčnih LTI sistemov.
+\begin{enumerate}[label=\alph*]
+    \item Zvezni sistemi: $T = \R$.
+    \begin{enumerate}[label=a\arabic*)]
+        \item Klasična vhodno-izhodna oblika. \\
+            $y^{(n)}(t) + k_1 y^{(n-1)}(t) + \dots + k_n y(t) = \beta_0 u^{(m)}(t) + \dots + \beta_m u(t)$ \\
+            začetni pogoji pri $t_0$.
+        \item Predstavitev v prostoru stanj. \\
+            $x^{.}(t) = A x(t) + B u(t); \quad x(t_0) = x_0, t \geq t_0$ \\
+            $x^{.}(t) \in \R^n$: vektor stanja sistema, \\
+            $u(t) \in \R^m$: vektor izhoda, \\
+            $y(t) \in \R^r$: izhod, \\
+            $m, r << n$. \\
+            % skica
+            $A: n \times n$ matrika stanje, \\
+            $B: n \times m$: vhodna matrika, \\
+            $C: r \times n$: izhodna matrika, \\
+            $D: r \times m$: matrika diskretnega prehoda.
+    \end{enumerate}
+    \item Diskretni sistemi: $T = \{\delta t \cdot k, k \in \Z\}$; \\
+        $\delta t$: interval vzorčenja. \\
+        $u_k = u(k \cdot \delta t)$: iz diferencialnih enačb dobimo diferenčne enačbe
+        \begin{enumerate}[label=b\arabic*)]
+            \item $y_{j+n} + k_1 y_{j+n-1} + \dots + k_n y_j = \beta_0 u_{j+m} + \dots +  \beta_m u_j$,
+                $j = 0, 1 \dots$ \\
+                + začetne vrednosti.
+            \item $x_{k+1} = A x_k + B u_k$ \\
+                $y_k = C x_k + D u_k$.
+        \end{enumerate}
+\end{enumerate}
+\begin{exmp} \text{} \\
+    $x^{'}(t) = a x(t) + u(t)$, \\
+    $x(t_0) = x_0, a \in \R$ \\
+    $\implies x(t) = e^{a(t-t_0)} + \int_{t_0}^t e^{a(t-s)} u(s) ds = \phi(t, t_0, x_0, u)$. \\
+    Preverimo lahko
+    \begin{enumerate}[label=\alph*)]
+        \item lastnost identitete: $\phi(t_0, t_0, x_0, u) = x_0 + 0 = x_0$,
+        \item lastnost polgrupe:
+            \begin{align*}
+                &\phi(t_2, t_1, \phi(t_1, t_0, x_0, u), u) \\
+                &= e^{a(t_2-t_1)} \cdot e^{a(t_1-t_0)} x_0
+                + \int_{t_0}^{t_1} e^{a(t_1-s)} u(s) ds + \int_{t_1}^{t_2} e^{a(t_2-s)} u(s) ds \\
+                &= \phi(t_2, t_0, x_0, u).
+            \end{align*}
+    \end{enumerate}
+    Podobno preverimo linearnost:
+    \begin{align*}
+        &\phi(t_1, t_0, \alpha_1 x_1 + \alpha_2 x_2, \alpha_1 u_1 + \alpha_2 u_2) \\
+        &= e^{a(t_1-t_0)}(\alpha_1 x_1 + \alpha_2 x_2) + \int_{t_0}^{t_1} e^{a(t_1-s)} (\alpha_1 u_1(s) + \alpha_2 u_2(s)) ds \\
+        &= \alpha_1 \phi(t_1, t_0, x_1, u_1) + \alpha_2 \phi(t_1, t_0, x_2, u_2).
+    \end{align*}
+    Vzročnost = p.z.m. (pogoj začetnega mirovanja) \\
+    $\phi(t_0, t_0, 0, 0) = 0$. \\
+    Časovna nespremenljivost
+    \begin{align*}
+        &\phi(t_1 + \sigma, t_2 + \sigma, x_0, u^{\sigma}) \\
+        &= e^{a(t_1+\sigma-(t_0+\sigma))} x_0 + \int_{t_0+\sigma}^{t_1+\sigma} e^{a(t_1+\sigma-s)} u(s-\sigma) ds.
+    \end{align*}
+    Substitucija $\tilde{s} = s - u$.
+\end{exmp}
+
+
 
 %\clearpage
 %\phantomsection
