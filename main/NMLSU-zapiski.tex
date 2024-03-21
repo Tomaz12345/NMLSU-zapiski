@@ -671,6 +671,239 @@ $\implies$ izhod je konvolucija impulznega odziva in vhoda $y(t) = (g * u)(t)$.
 
 
 
+% 3. predavanje 5.3.
+
+% skica
+\begin{equation}
+  \label{eq:sistem}
+  y^{(n)}(t) + k_1 y^{(n-1)}(t) + \dots + k_n y(t) = \beta_0 u^{(m)}(t) + \dots + \beta_m u(t)
+\end{equation}
+$\L(u(t))(s) = \int_{0_-}^{\infty} f(t) e^{-ts} dt =: \tilde{u}(s), \\
+\tilde{y}(s) := \L(y(t))(s)$ \\
+$\tilde{y}(s) = g(s) \tilde{u}(s)$ \\
+$g(s) = \frac{\beta_0 s^m + \dots + \beta_m}{s^n + k_1 s^{n-1} + \dots + k_n}$ prenosna funkcija, \\
+$\delta(t)$: enotski impulz $\implies h(t)$ impulzni odziv, \\
+$u_s(t)$: enotska stopnica $\implies y_s(t)$ stopični odziv \\
+$\L(\delta(t))(s) \equiv 1 \implies \L(h(t))(s) = g(s)$ \\
+$\L(u_s(t))(s) = \frac{1}{s}$ \\
+$y(t) = (u * h)(t) = \int_0^t u(\tau) h(t-\tau) d\tau$ \\
+$\delta(t) = u_s^{'}(t)$, na enem primeru smo videli $h(t) = y_s^{'}(t)$.
+\begin{theorem}
+  Če je $h(t)$ impulzni odziv relaksiranega LTI sistema in $y_s(t)$ njegov stopični odziv,
+  potem je $h(t) = y_s^{'}(t)$.
+\end{theorem}
+\begin{pro} \text{} \\
+  \begin{enumerate}[label=\alph*)]
+      \item Če uporabimo zvezo s konvolucijo, dobimo
+          \begin{align*}
+              y_s(t) &= (u_s * h)(t) \\
+              &= \int_0^t u(\tau) h(t-\tau) d\tau \\
+              &= \int_0^t h(\tau) u(t-\tau) d\tau \\
+              &= \int_0^t h(t) d\tau
+          \end{align*}
+          $\implies y_s^{'}(t) = h(t)$ (oz. tudi z Laplacem).
+      \item Velja še bolj splošno: če je $y(t)$ izhod za $u(t)$,
+          potem je $y^{'}(t)$ izhod za $u^{'}(t)$. \\
+          \refeq{eq:sistem} lahko zapišemo v obliki \\
+          $A y = B u$, \\
+          kjer sta $A$ in $B$ diferencialna operatorja: \\
+          $A = \frac{d^n}{dt^n} + k_1 \frac{d^{n-1}}{dt^{n-1}} + \dots + k_n I_d$, \\
+          $B = \beta_0 \frac{d^m}{dt^m} + \dots + \beta_m I_d$. \\
+          Ker $A, B$ komutirata z $\frac{d}{dt} \implies
+          \frac{d}{dt} A y = \frac{d}{dt} B u$ \\
+          $A \left(\frac{d}{dt} y\right) = B \left(\frac{d}{dt} u \right)$.
+  \end{enumerate}
+\end{pro}
+
+
+\section{Stabilnost}
+
+Če imamo sistem z enim vhodom in enim izhodom, je to SISO (single input-single output) sistem.
+% skica
+\begin{defn}
+  SISO sistem je BIBO (bounded input-bounded output) stabilen,
+  če je sistem tak, da je za vsak omejen vhod tudi izhod omejen. \\
+  Če $\exists c_1$, da je $|u(t)| < c_1$ za $\forall t \geq 0$, potem $\exists c_2$,
+  da je $|y(t)| \leq c_2$ za $\forall t \geq 0$.
+\end{defn}
+\begin{theorem}
+  SISO sistem je BIBO stabilen $\iff$ impulzni sistem je absolutno integrabilen:
+  $\int_0^{\infty} |h(t)| dt < \infty$.
+\end{theorem}
+\begin{pro} \text{} \\
+  $(\Leftarrow)$: \\
+  Naj bo $|u(t)| < c_1$,
+  \begin{align*}
+      &y(t) = \int_0^t h(\tau) u(t-\tau) d\tau \\
+      \implies &|y(t)| \leq c_1 \int_0^t |h(\tau)| d\tau
+      \leq c_1 \int_0^{\infty} |h(\tau)| d\tau =: c_2 < \infty.
+  \end{align*}
+  $(\Rightarrow)$: \\
+  Denimo, da $h(t)$ ni absolutno integrabilen, torej za $\forall M > 0 \; \exists T > 0$,
+  da je $\int_0^T |h(\tau)| d\tau \geq M$. \\
+  Če za isti $T$ vzamemo za vhod \\
+  $u(t) = sign(h(\tau-t))$, je \\
+  $y(T) = \int_0^T u(\tau) h(t-\tau) d\tau = \int_0^T |h(t-\tau)| d\tau \geq M$ \\
+  $\implies$ sistem ni BIBO stabilen.
+\end{pro}
+V primeru standardne vhodno-izhodne oblike, kjer ima premosna funkcija obliko racionalne funkcije,
+je stabilnost odvisna od polov sistema.
+\begin{enumerate}[label=\alph*)]
+  \item Za vse pole $p_1 \dots p_n$ velja $Re(p_i) < 0 \implies$ sistem je BIBO stabilen \\
+      $\{z \in \C: Re(z) < 0\}$.
+  \item Za vse pole velja $Re(p_i) \leq 0$ in vsi poli, kjer je $Re(p_i) = 0$ so enostavni. \\
+      Iz enostavnosti polov $p_1 \dots p_n$ dobimo \\
+      $h(t) = \sum_{i=1}^n \alpha_i e^{p_i t}$. \\
+      V primeru polov $p_1 \dots p_r$ z večkratnostmi $m_1 \dots m_r, \sum_{j=1}^r m_j = n$
+      dobimo $h(t) = \sum_{i=1}^r \alpha_i e^{p_i t}$,
+      kjer je $\alpha_i$ polinom stopnje $m_i-1$ \\
+      $\implies$ sistem je šibko stabilen, ni BIBO stabilen, je za $h(t)$ omejen.
+  \item Če obstaja pol z $Re(p_i) > 0$ ali večkraten pol z $Re(p_i) = 0$
+      $\implies$ sistem ni stabilen.
+\end{enumerate}
+\begin{exmp} \text{} \\
+  Splošni sistem 1. reda je \\
+  $y^{'}(t) + k_1 y(t) = \beta_0 u(t) \implies g(s) = \frac{\beta_0}{s+k_1}$ \\
+  $\implies h(t) = \beta_0 e^{-k_1 t} [u_s(t)]$. \\
+  Za stabilnost potrebujemo: $k_1 > 0$ za BIBO stabilnost in $k_1 = 0$ za šibko stabilnost. \\
+  % skica
+  Stopnični odziv: $y_s(t) = \frac{\beta_0}{k_1} \left(1 - e^{-k_1 t}\right)$. \\
+  % skica
+  Splošni sistem 2. reda: \\
+  $y^{''}(t) + k_1 y^{'}(t) + k_2 y(t) = \beta_0 u(t); k_1, k_2 \geq 0$. \\
+  Tak sistem ustreza npr. situaciji [z vzmetjo]. \\
+  % skica
+  $m y^{..}(t) + b y^{.}(t) + k y(t) = f(t)$; \\
+  $b$: koeficient dušenja, \\
+  $k$: koeficient vzmeti. \\
+  Dušenje je proporcionalno hitrosti $(y^{.}(t))$, \\
+  sila vzmeti je proporcionalna raztezku $(y(t))$. \\
+  Poli: $s^2 + k_1 s + k_2 = 0 \implies s_{1,2} =
+  \frac{-k_1 \pm \sqrt{k_1^2 - 4k_1}}{2}$.
+  \begin{enumerate}[label=\alph*)]
+      \item $k_1^2 > 4k_2$: 2 realna pola, oba sta negativna \\
+          $\implies$ nekritično dušenje.
+      \item $k_1^2 < 4k_2$: kompleksen par polov $p = \sigma \pm i \omega$ \\
+          $\sigma = -\frac{k_1}{2}, \omega = \frac{\sqrt{4k_2 - k_1^2}}{2}$ \\
+          $\implies$ podkritično dušenje.
+      \item $k_1^2 = 4k_2 \implies p_{1,2} = -\frac{k_1}{2}$ \\
+          $\implies$ kritično dušenje.
+  \end{enumerate}
+  Impulzni odzivi so
+  \begin{enumerate}[label=\alph*)]
+      \item $\frac{\beta_0}{p_1-p_2} \left(e^{p_1 t} - e^{p_2 t}\right)$
+      \item $\frac{\beta_0}{\omega_0} e^{\sigma t} \sim (\omega_0 t)$
+      \item $\frac{\beta_0}{k_2} p^2 + e^{pt}$.
+  \end{enumerate}
+  Npr. $k_1 = \frac{1}{2}, 1, \frac{3}{2}, 2, 3, 4, k_2 = 1$: \\
+  $\frac{1}{2}, 1, \frac{3}{2} \to b), 2 \to a), 3, 4 \to c)$.
+\end{exmp}
+
+
+\section{Bodejev diagram}
+
+Imamo relaksiran sistem v vhodno-izhodni obliki: \\
+$\tilde{y}(s) = g(s) \tilde{u}{s}$, \\
+$g(s) = \frac{\beta_0 s^m + \dots + \beta_m}{s^n + k_1 s^{n-1} + \dots + k_n}$. \\
+Zanima nas odziv na vhod oblike $u(t) = e^{\alpha t} [u_s(t)]$. \\
+Predpostavimo, da $\alpha$ ni pol \\
+$\L(u(t))(s) = \frac{1}{s-\alpha} \implies y(t) =
+\L^{-1}\left(\frac{1}{s-\alpha} g(s)\right)(t)$ \\
+$\implies$ v razvoju na parcialne ulomke dobimo poleg členov s poli $g$ še $\frac{A}{s-\alpha}$. \\
+Ker $\alpha$ ni pol prenosne funkcije $\implies$ \\
+$A = \lim_{s \to \infty} \left(\frac{1}{s-\alpha} \cdot g(s) (s-\alpha)\right) = g(\alpha)$ \\
+$\implies y(t)$ vsebuje člen $g(\alpha) e^{\alpha t}$. \\
+$\cos(\omega t) = \frac{1}{2} \left(e^{i \omega t} + e^{-i \omega t}\right)$ \\
+$\implies$ če je $u(t) = \cos(\omega t), y(t)$ vsebuje \\
+$\frac{1}{2} g(i \omega) e^{i \omega t} + \frac{1}{2} g(-i \omega) e^{-i \omega t}$; \\
+$g(i \omega) = |g(i \omega)| e^{i \phi}$, \\
+$g(-i \omega) = \overline{g(i \omega)}$ \\
+$\implies y(t)$ vsebuje
+\begin{equation*}
+  \frac{1}{2} |g(i \omega)| \left(e^{i \phi} \cdot e^{i \omega t} +
+  e^{-i \phi} \cdot e^{-i \omega t}\right) = |g(i \omega)| cos(\omega t + \phi).
+\end{equation*}
+$|g(i \omega)|$: ojačanje ali amplitudni odziv, \\
+$\phi = arg(g(i \omega))$: fazni premik. \\
+Ojačanje merimo v decibelih: $|g(i \omega)|_{db} = 20 \log_{10} (|g(i \omega)|)$. \\
+Fazni premik merimo v stopinjah od $-180^{\circ}$ do $180^{\circ}$. \\
+Bodejev diagram je graf amplitudnega in faznega odziva. \\
+$g(i \omega)$: frekvenčna funkcija.
+\begin{exmp} \text{} \\
+  $Z_f \left([3 \; 2], [1 \; 1+2\alpha \; 4+2\alpha+\alpha^2 \; 4+\alpha^2]\right)$ \\
+  $\implies$ poli so $-1, -\alpha+2i, -\alpha-2i$ \\
+  $\alpha = 0.1 \dots$ \\
+  $\alpha = 0.01 \dots$
+\end{exmp}
+
+
+\section{Routh-Hurtwizov kriterij}
+
+Če je $g(s)$ racionalna funkcija,
+je stabilnost odvisna od položaja polov oz. ničel imenovalca \refeq{eq:sistem}.
+\begin{defn}
+  Za polinom $p(x) = a_0 x^n + a_1 x^{n-1} + \dots + a_n, a_0 \neq 0, a_i \in \R$ pravimo,
+  da je stabilen, če vse njegove ničle ležijo strogo v levi kompleksni podravnini
+  $\{z \in \C: Re(z) < 0\}$.
+\end{defn}
+\begin{lemma}
+  Če je polinom \refeq{eq:sistem} stabilen,
+  potem so vsi koeficienti neničelni in istega predznaka.
+\end{lemma}
+\begin{pro} \text{} \\
+  $p(x) = a_0 (x-\xi_1) \dots (x-\xi_k)$, kjer so $\xi_1 \dots \xi_k$ ničle. \\
+  Lahko predpostavimo, da je $a_0 > 0$.
+  \begin{enumerate}[label=\alph*)]
+      \item $\xi_i \in \R \implies \xi_i = -b_i$ za neki $b_i > 0 \implies \xi_i$
+          \sn{pripada} faktor $(x+b_i)$.
+      \item $\xi_i \notin \R \implies \xi_{i,i+1} = -c_i \pm i d_i$ za neki
+          $c_i > 0, d_i \neq 0$ \\
+          $\implies$ \sn{pripada} $(x+c_i-id_i) (x+c_i+id_i) = (x^2 + 2c_ix + c_i^2+d_i^2)$ \\
+          $\implies$ $p(x)$ je produkt linearnih in kvadratnih faktorjev
+          s pozitivnimi realnimi koeficienti \\
+          $\implies$ vsi koeficienti $p$ so neničelni in istega predznaka.
+  \end{enumerate}
+\end{pro}
+To je potreben, ne pa tudi zadosten pogoj, npr. \\
+$p(x) = x^3 + x^2 + 2x + 8 = (x+2) (x^2-x+4)$; \\
+$x^2-x+4$ ne ustreza pogoju $\implies p$ ni stabilen. \\
+Za polinom \refeq{eq:sistem} definiramo Routhovo tabelo
+\begin{center}
+  \begin{tabular}{c | c c c c c}
+       & & & & & \\
+      \hline
+      0 & $a_0$ & $a_2$ & $a_4$ & $a_6$ & $\dots$ \\
+      1 & $a_1$ & $a_3$ & $a_5$ & $a_7$ & $\dots$ \\
+      2 & $\gamma_{21}$ & $\gamma_{22}$ & $\gamma_{23}$ & $\dots$ & \\
+      3 & $\gamma_{31}$ & $\gamma_{32}$ & $\dots$ & & \\
+      $\vdots$ & & & & & \\
+      $n$ & $\gamma_n$
+  \end{tabular}
+\end{center}
+Za $k \geq 2: r_{k,j} = r_{k-2,j+1} - \frac{r_{k-2,1}}{r_{k-1,1}} \cdot r_{k-1,j+1}$.
+% skica
+\begin{exmp} \text{} \\
+  $p(x) = x^5 + 2x^4 + 6x^3 + 6x^2 + 4x + 2$
+  \begin{center}
+      \begin{tabular}{c | c c c c}
+          & & & & \\
+          \hline
+          0 & 1 & 6 & 4 & \\
+          1 & 2 & 6 & 2 & \\
+          2 & 3 & 3 & & $[6 \; 4] - \frac{1}{2} [6 \; 2] = [3 \; 3]$ \\
+          3 & 4 & 2 & & $[6 \; 2] - \frac{2}{3} [3 \; 0] = [4 \; 2]$ \\
+          4 & $\frac{3}{2}$ & & & $3 - \frac{1}{4} \cdot 2 = \frac{3}{2}$ \\
+          5 & 2 & & & $2 - \frac{3}{2} \cdot 0$
+      \end{tabular}
+  \end{center}
+\end{exmp}
+\begin{theorem}[Routh-Horwitz]
+  Polinom \refeq{eq:sistem} je stabilen $\iff$
+  vsi elementi v 1. stolpcu Routhove tabele so neničelni in istega predznaka.
+\end{theorem}
+
+
+
 %\clearpage
 %\phantomsection
 
