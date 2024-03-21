@@ -439,6 +439,238 @@ Ukvarjali se bomo z naslednjimi oblikami vzorčnih LTI sistemov.
 
 
 
+% 2. predavanje: 27.2.
+
+\section{Laplaceova transformacija}
+
+\begin{defn}
+    Naj bo $f: [0, \infty) \to \R$.
+    Laplaceova transformacija preslika $f$ v $F = \L(f)$, ki je definirana za $s \in \C$ z
+    \begin{equation*}
+        F(s) = \int_0^{\infty} f(t) e^{-st} dt
+    \end{equation*}
+    za vse tiste $s$, kjer integral obstaja.
+\end{defn}
+Pišemo: $\L(f(t))(s) = F(s)$ oz. $F = \L(f)$. \\
+$t$: običajno čas, \\
+$f$ original, $\L(f)$ Laplaceova transformiranka. \\
+$\L$ preslika funkcijo iz časovnega prostora spremenljivke $t$ v funkcijo $F$
+v frekvenčnem prostoru spremenljivke $s$.
+\begin{theorem}
+    Če je $f: [0, \infty) \to \R$ odsekoma zvezna in je \\
+    $\int_0^{\infty} |f(t)| e^{-\sigma_0 t} dt < \infty$,
+    potem Laplaceova transformacija $f$ obstaja za vse $s$, kjer je $Re(s) \geq \sigma_0$.
+\end{theorem}
+\begin{pro}
+    Naj bo $Re(s) \geq \sigma_0$. Potem je
+    \begin{align*}
+        |f(s)| &= \left| \int_0^{\infty} f(t) e^{-st} dt \right| \\
+        &\leq  \int_0^{\infty} |f(t)| \left| e^{-st} \right| dt \\
+        &\leq  \int_0^{\infty} |f(t)| \left| e^{-\sigma_0 t} \right| dt \\
+        &< \infty.
+    \end{align*}
+\end{pro}
+Konvergenčna abscisa: tak $\alpha \in \R$ (če obstaja), da $\L(f)$ obstaja za vsak $s$ z
+$Re(s) \geq \alpha$ in ne obstaja za $Re(s) < \alpha$. \\
+Laplaceova transformacija odvoda:
+\begin{align*}
+    \L\left(f^{'}(t)\right)(s) &= \int_{0}^{\infty} f^{'}(t) e^{-st} dt \\
+    &\stackrel{\text{per partes}}{\longeq{30px}} f(t) e^{-st} \vline_{0}^{\infty} +
+    s \int_0^{\infty} f(t) e^{-st} dt \\
+    &= -f(0_-) + s f(s).
+\end{align*}
+Tukaj predpostavimo, da je $f$ eksponentnega tipa, kar pomeni, da je \\
+$|f(t)| \leq M \cdot e^{ct}$ za konstanti $M, c \in \R$. \\
+$\L\left(f^{'}(t)\right)(s) = s \L(f(t))(s) - f(0_-)$. \\
+Za naše potrebe potrebujemo malce spremenjeno Laplaceovo transformacijo $\L$, kjer je
+\begin{equation*}
+    \L(f(t))(s) = \int_{0_-}^{\infty} f(t) e^{-st} dt =
+    \lim_{\varepsilon \to 0} \int_{0-\varepsilon}^{\infty} f(t) e^{-st} dt.
+\end{equation*}
+To potrebujemo zaradi posebnih funkcij, ena izmed njih je t.j. enotski impult $\delta(t)$,
+definiran z $\delta(t) = 0$ za $\forall t \neq 0$ in $\int_{-\infty}^{\infty} \delta(t) dt = 1$. \\
+$\delta$: Diracova delta funkcija. \\
+$\delta(t)$ si lahko predstavljamo kot limito ustreznih funkcij, npr.
+\begin{enumerate}[label=\alph*)]
+    \item $\delta_{\varepsilon}(t) = \begin{cases}
+        \frac{1}{2 \varepsilon} & \text{ za } -\varepsilon \leq t \leq \varepsilon \\
+        0 & \text{ sicer}
+        \end{cases}$ - odsekoma zvezna,
+    \item $\delta_{\varepsilon}(t) = \frac{1}{\varepsilon \sqrt{\pi}} e^{-\frac{t^2}{\varepsilon}}$ -
+      neskončnokrat zvezno odvedljiva.
+\end{enumerate}
+Za $\L(\delta)$ potem dobimo
+\begin{align*}
+    \L(\delta(t))(s) &= \lim_{\varepsilon \to 0} \int_{0 - \varepsilon}^{\infty} \delta_{\varepsilon}(t) e^{-st} dt \\
+    &= \lim_{\varepsilon \to 0} \int_{-\varepsilon}^{\varepsilon} \frac{1}{2 \varepsilon} e^{-st} dt \\
+    &= \lim_{\varepsilon \to 0} \frac{1}{2 \varepsilon s} \left(e^{\varepsilon s} - e^{-\varepsilon s}\right) \\
+    &= \left(e^{s}\right)^{'}(0) = 1.
+\end{align*}
+$\L(\delta(t))(s) = 0$ za $\forall t \neq 0$. \\
+Druga posebna funkcija je enotska stopnica - $u_s(t) = \begin{cases}
+    1: \; &t \geq 0 \\
+    0: \; &t < 0
+\end{cases}$, $s$: \sn{step}. \\
+$\L(u_s(t))(s) = \int_0^{\infty} e^{-st} = \frac{1}{s}$. \\
+V dinamičnih sistemih lahko pišemo, da je $\delta(t) = u_s^{'}(t)$.
+Argumenti so
+\begin{enumerate}[label=\alph*)]
+    \item $u_s^{'}(t) = 0$ za $\forall t \neq 0$,
+    \item $1 = \L(\delta(t))(s) = s \cdot \L(u_s(t))(s) - u_s(0_-) = s \cdot \frac{1}{s} - 0 = 1$ \checkmark
+\end{enumerate}
+Podobno velja za višje odvode \\
+$\L\left(\delta^{(k)}(t)\right)(s) = s^k$ (a) ni najbolj ustrezna). \\
+Funkcija $f$ je lahko oblike $f(t) = f_r(t) + f_{sing}(t)$; \\
+$f_r(t)$ je regularni del, to je kosoma zvezno odvedljiva funkcija,
+kjer je točk nezveznosti na vsakem končnem intervalu končno mnogo, v vseh točkah obstajajo
+$\lim_{t \to t_u^-} f^{(j)}(t)$ in $\lim_{t \to t_u^+} f^{(j)}(t)$, \\
+$f_{sing}(t)$ je oblike $\sum_{k=1}^{\infty} \sum_{j_k=0}^{n_k} \alpha_{jk} \delta{j_k} (t-t_k)$. \\
+Glavne lastnosti:
+\begin{enumerate}
+    \item linearnost: $\L(\alpha_1 f_1(t) + \alpha_2 f_2(t))(s) = \alpha_1 F_1(s) + \alpha_2 F_2(s)$,
+        to velja za $s \in \C$, kjer sta definirani hkrati $F_1$ in $F_2$,
+    \item transformiranka odvoda:
+        \begin{align*}
+            &\L(f^{'}(t))(s) = s F(s) - f^{'}(0_-) \\
+            &\L(f^{''}(t))(s) = s \L(f^{'}(t))(s) - f^{'}(0_-) = s^2 F(s) - s f(0_-) - f^{'}(0_-) \\
+            &\L(f^{(n)}(t))(s) = s^n F(s) - s^{n-1} f^{'}(0_-) + \dots + f^{(n-1)}(0_-),
+        \end{align*}
+    \item transformiranka integrala: $\L\left(\int_0^{\infty} f(\tau) d\tau\right) = \frac{F(s)}{s}$,
+    \item časovni premik: $\L(f(t-t_0) u_s(t-t_0))(s) = e^{-t_0 s} F(s)$; \\
+        $u_s(t-t_0)$: na ta način odrežemo vse vrednosti pred $t_0$,
+    \item frekvenčni premik: $\L(f(t) e^{\alpha t})(s) = F(s-\alpha)$,
+    \item izrek o začetni vrednosti: $\lim_{s \to \infty} F(s) = f(0_+)$,
+    \item izrek o končni vrednosti: $\lim_{s \to 0} s F(s) = \lim_{t \to \infty} f(t)$; \\
+        to velja, če je $s F(s)$ analitična na $\{s: Re(s) \geq 0\} \iff F$
+        nima polov s pozitivnim realnim delom, pri $s=0$ pa ima največ pol stopnje 1,
+    \item inverzna transformacija: $f(t) = \L^{-1}(F(s))(t) =
+        \frac{1}{2 \pi i} \int_{\sigma - i \infty}^{\sigma + i \infty} F(s) e^{-st} ds$,
+        kjer je $\sigma$ večji od vseh realnih delov $F$,
+    \item če je $f_1(t) = f_2(t) = 0$ za $t < 0$, potem je konvolucija $f_1$ in $f_2$ definirana z
+        \begin{equation*}
+            (f_1 * f_2)(t) = \int_0^t f_1(\tau) f_2(t-\tau) d\tau = \int_0^t f_2(\tau) f_1(t-\tau) d\tau.
+        \end{equation*}
+        Velja: $\L((f_1 * f_2)(t))(s) = F_1(s) F_2(s)$; \\
+        Laplaceova transformacija konvolucije funkcij je produkt Laplaceovih transformirank. \\
+        V drugo smer: $\L(f_1(t) f_2(t))(s) = \frac{1}{2 \pi i} \int_{\sigma - i \infty}^{\sigma + i \infty}
+        F_1(\rho) F_2(s - \rho) d\rho$; \\
+        Laplaceova transformacija produkta je konvolucija Laplaceovih transformirank.
+\end{enumerate}
+\begin{exmp} za konvolucijo. \\
+    $f_1(t) = \begin{cases}
+        1 - \frac{t}{4}; & 0 \leq t \leq 4 \\
+        0; & \text{sicer}
+    \end{cases}$ \\
+    % skica
+    $f_2(t) = \begin{cases}
+        \frac{3}{2} - \frac{t}{2}; & 1 \leq t \leq 3 \\
+        0; & \text{sicer}
+    \end{cases}$ \\
+    % skica
+    $(f_1 * f_2)(t) = \int_0^t f_1(\tau) f_2(t-\tau) d\tau$ \\
+    $\implies (f_1 * f_2)(t) = \begin{cases}
+        0; & t \leq 1 \text{ ali } t \geq 7 \\
+        g_1(t); & 1 \leq t \leq 3 \\
+        g_2(t); & 3 \leq t \leq 5 \\
+        g_3(t); & 5 \leq t \leq 7
+    \end{cases}$
+    % skica
+\end{exmp}
+Nekaj osnovnih transformacij
+\begin{center}
+   \begin{tabular}{c | c}
+        $f(t)$ & $F(s)$ \\
+        \hline
+        $\delta(t)$ & 1 \\
+        $u_s(t)$ & $\frac{1}{s}$ \\
+        $e^{-at} u_s(t)$ & $\frac{1}{s + a}$ \\
+        $\cos(at)$ & $\frac{s}{s^2 + a^2}$ \\
+        $\sin(at)$ & $\frac{a}{s^2 + a^2}$
+   \end{tabular}
+\end{center}
+
+\begin{center}
+   \begin{tabular}{c | c}
+        $f(t)$ & $F(s)$ \\
+        \hline
+        $\delta^k(t)$ & $s^k$ \\
+        $t^k u_s(t)$ & $\frac{k!}{s^{k+1}}$ \\
+        $\frac{t^k}{k!} e^{-at}$ & $\frac{1}{(s+a)^{k+1}}$ \\
+        $\cosh(at)$ & $\frac{s}{s^2 - a^2}$ \\
+        $\sinh(at)$ & $\frac{a}{s^2 - a^2}$
+   \end{tabular}
+\end{center}
+
+
+\section{Prenosna funkcija}
+
+% skica
+Klasična vhodno-izhodna oblika LTI sistema je podana z \\
+$y^{(n)}(t) + k_1 y^{(n-1)}(t) + \dots + k_n y(t) = \beta_0 u^{(m)}(t) + \dots + \beta_m u(t)$ \\
++ začetni pogoji. \\
+Pravimo, da je sistem relaksiran, če je: \\
+$y^{(j)}(0_-) = 0$ za $j = 0, 1 \dots n-1$, \\
+$u^{(l)}(o_-) = 0$ za $l = 0, 1 \dots m$. \\
+Naj bo $\tilde{y}(s) = \L(y(t))(s), \tilde{u}(s) = \L(u(t))(s)$.
+Tako dobimo
+\begin{equation*}
+    \left(s^n + k_1 s^{n-1} + \dots + k_n\right) \tilde{y}(s) =
+    \left(\beta_0 s^m + \dots + \beta_m\right) \tilde{u}(s);
+\end{equation*}
+$k(s) := s^n + k_1 s^{n-1} + \dots + k_n$ in \\
+$\beta(s) := \beta_0 s^m + \dots + \beta_m$ sta karakteristična polinoma. \\
+$\L\left(y{(n)}(t)\right)(s) = s^k \tilde{y}(s) - \dots$ \\
+Ostalo $= 0$, ker je sistem relaksiran. \\
+$\tilde{y}(s) = \frac{\beta(s)}{k(s)} \tilde{u}(s) = g(s) \tilde{u}(s)$; \\
+$g(s)$: prenosna funkcija. \\
+Poli $g$ so ničle $k$, označimo jih s $p_1 \dots p_n$, \\
+ničle $g$ so ničle $\beta$, označimo jih z $z_1 \dots z_m$ \\
+$\implies$ dobimo t.i. zpk (ničle-poli-ojačanje) obliko \\
+$g(s) = \beta_0 \frac{(s-z_1) \dots (s-z_m)}{(s-p_1) \dots (s-p_n)}$. \\
+Posebni primeri izhodov (odzivov) so:
+\begin{enumerate}[label=\alph*)]
+    \item če je vhod enotski impulz $\delta(t)$, dobimo impulzni odziv $h(t)$,
+    \item če je vhod enotska stopnica $u_s(t)$, dobimo stopnični odziv $y_s(t)$.
+\end{enumerate}
+% skica
+$\L(\delta(t))(s) = 1 \implies \L(h(t))(s) = g(s) \implies$
+Laplaceova transformiranka impulznega odziva je prenosna funkcija. \\
+$h(t) = \L^{-1}(g(s))(t)$. \\
+Podobno iz $\L(u_s(t))(s) = \frac{1}{s}$ sledi $y_s(t) =
+\L^{-1}\left(\frac{g(s)}{s}\right)(t)$ \\
+% skica
+$\implies$ izhod je konvolucija impulznega odziva in vhoda $y(t) = (g * u)(t)$.
+\begin{theorem}
+    Odziv na poljuben vhod $u(t)$ je konvolucija impulznega odziva in vhoda
+    $y(t) = (h * u)(t) = \int_0^t u(\tau) h(t-\tau) d\tau$.
+\end{theorem}
+\begin{exmp} \text{} \\
+    Imamo relaksiran sistem $y^{''}(t) + 3 y{'}(t) + 2 y(t) = 4 u^{'}(t) + u(t)$ \\
+    $\implies g(s) = \frac{4s+1}{s^2+3s+2}$. \\
+    Z razvojem v parcialne ulomke lahko dobimo impulzni in stolpični odziv.
+    \begin{enumerate}[label=\alph*)]
+        \item Impulzni odziv \\
+            $h(t) = \L^{-1}(g(s))(t)$ \\
+            $g(s) = \frac{A_1}{s+1} + \frac{A_2}{s+2} = \frac{-3}{s+1} + \frac{7}{s+2}$ \\
+            $A_1 = g(s) (s+1) \vert_{s=-1} = \frac{4s+1}{s+2} \vert_{s=-1} = -3$ \\
+            $A_2 = g(s) (s+2) \vert_{s=-2} = \frac{4s+1}{s+1} \vert_{s=-2} = 7$ \\
+            $\implies h(t) = \left( -3e^{-t} + 7e^{-2t}\right) u_s(t)$; \\
+            $u_s(t)$, ker je odziv vedno za $t \geq 0$.
+            % skica
+        \item Stopnični odziv \\
+            $y_s(t) = \L^{-1}\left(\frac{g(s)}{s}\right)(t)$ \\
+            $\frac{g(s)}{s} = \frac{\frac{1}{2}}{s} + \frac{s}{s+2} - \frac{\frac{3}{2}}{s+2}$ \\
+            $\implies y_s(t) = \left(\frac{1}{2} + 3 e^{-t} - \frac{3}{2} e^{-2t}\right) u_s(t)$; \\
+            $\frac{1}{2}$: stacionarni odziv, \\
+            $3e^{-t} - \frac{3}{2} e^{-2t}$: prehodni odziv. \\
+            % skica
+            $\lim_{s \to \infty} s F(s) = \lim_{t \to \infty} f(t)$, \\
+            $y_s^{'}(t) = h(t)$.
+    \end{enumerate}
+\end{exmp}
+
+
+
 %\clearpage
 %\phantomsection
 
