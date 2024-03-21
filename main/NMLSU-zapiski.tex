@@ -904,6 +904,250 @@ Za $k \geq 2: r_{k,j} = r_{k-2,j+1} - \frac{r_{k-2,1}}{r_{k-1,1}} \cdot r_{k-1,j
 
 
 
+% 4. predavanje 12.3.
+
+Routh-Hurwitzov kriterij
+\begin{equation}
+    \label{eq:RH-poly}
+    p(x) = a_0 x^n + a_1 x^{n-1} + \dots + a_n; \; a_0 \neq 0, a_i \in \R
+\end{equation}
+Polinom je stabilen, če vse njegove ničle ležijo v $\{z \in \C: Re(z) \neq 0\}$ \\
+$\implies$ vsi koeficienti so neničelni in istega predznaka. \\
+Routhova tabela
+\begin{center}
+    \begin{tabular}{c | c c c c}
+        & & & & \\
+        \hline
+        0 & $a_{0}$ & $a_{2}$ & $a_{4}$ & $a_{6}$ \\
+        1 & $a_{1}$ & $a_{3}$ & $a_{5}$ & $a_{7}$ \\
+        2 & $r_{21}$ & $r_{22}$ & $r_{23}$ & \\
+        3 & $r_{31}$ & $r_{32}$ & & \\
+        \vdots & & & & \\
+        $n$ & $r_{n1}$
+    \end{tabular}
+\end{center}
+% skica
+$r_{k,j} = r_{k-2,j+1} - \frac{r_{k-2,1}}{r_{k-1,1}} \cdot r_{k-1,j+1}$.
+\begin{theorem}
+    Polinom \refeq{eq:RH-poly} je stabilen $\iff$ vsi elementi v 1. stoplcu
+    Routhove tabele so neničelni in istega predznaka.
+\end{theorem}
+\begin{lemma}
+    Polinom \refeq{eq:RH-poly} je stabilen $\iff a_0 a_1 > 0$ in je polinom \\
+    $q(x) = p(x) - \frac{a_0}{a_1} \left(a_1 x^n + a_3 x^{n-2} + a_5 x^{n-4} + \dots \right)$
+    stabilen.
+\end{lemma}
+\begin{pro} izreka (ob predpostavkah, da lema velja). \\
+    Uporabimo indukcijo: \\
+    $n=1$:
+    \begin{align*}
+        a_0 + a_1 x = 0 \implies x = -\frac{a_1}{a_0} < 0 \text{ za } a_0 a_1 > 0.
+    \end{align*}
+    $n-1 \to n$: \\
+    ključna je ugotovitev, da spodnjih $n$ vrstic Routhove tabele ustreza
+    Routhovi tabeli za polinom $q$ stopnje $n-1$ iz leme. \\
+    Res: 
+    \begin{align*}
+        q(x) &= a_1 x^{n-1} + a_3 x^{n-3} \\
+        &+ \left(a_2 - \frac{a_0}{a_1} a_3 \right) x^{n-2} + \left(a_4 - \frac{a_0}{a_1} a_5 \right) x^{n-4} + \dots
+    \end{align*} 
+    1. del: 1. vrstica, \\
+    2. del: $[a_2 \; a_4 \dots] - \frac{a_0}{a_1} [a_3 \; a_5 \dots] \to$ formula. \\
+    $p$ je stabilen \\
+    $\iff a_0 a_1 > 0$ in vsi elementi iz 1. stolpca Routhove tabele za $f$ so neničelni
+    in istega predznaka \\
+    $\iff a_0 a_1 > 0$ in elementi od 1. do zadnjega iz Routhove tabele so neničelni
+    in istega predznaka \\
+    $\iff$ vsi elementi 1. stolpca Routhove tabele so neničelni in istega predznaka.
+\end{pro}
+\begin{pro} leme. \\
+    Predpostavimo lahko $a_1 \neq 0$ (vsi koeficienti so $> 0$ ali $< 0$). \\
+    Razdelimo: $p(x) = p_{sod}(x) + p_{lih}(x)$ - sode, lihe potence. \\
+    Definiramo
+    \begin{align*}
+    h_{\lambda}(x) &= p(x) - \lambda \frac{a_0}{a_1} \left(a_1 x^n + a_2 x^{n-2} + \dots \right) \\
+    &= \begin{cases}
+        p(x) - \lambda \frac{a_0}{a_1} x \cdot p_{lih}(x); \; n \text{ sod} \\
+        p(x) - \lambda \frac{a_0}{a_1} x \cdot p_{sod}(x); \; n \text{ lih}
+    \end{cases}
+    \end{align*}
+    $h_{\lambda}(x)$ je polinom stopnje $n$ za vsak $\lambda \neq 1$, pri $\lambda = 1$
+    dobimo $h_{\lambda}(x) = q(x)$, pri $\lambda = 0$ pa $h_{\lambda}(x) = p(x)$. \\
+    % skica
+    Pokažemo lahko, da ima $h_{\lambda}$ vedno isto število ničel na imaginarni osi,
+    neodvisno od $\lambda$. \\
+    Denimo, da je $n$ sod (za lih primer je dokaz podoben). \\
+    $h_{\lambda}(x) = p_{sod}(x) - \lambda \frac{a_0}{a_1} p_{lih}(x) + p_{lih}(x)$; \\
+    $p_{sod}(x) - \lambda \frac{a_0}{a_1} p_{lih}(x)$: sod polinom, \\
+    $p_{lih}(x)$: lih polinom.
+    Naj bo $h_{\lambda}(i \alpha) = 0$ za $\alpha \in \R, \alpha \neq 0$ za nek $\lambda$. \\
+    Vemo: $g_{\lambda}(x) \in \R$ (sod) \text{ in } $p_{lih}(i \alpha) \in i \R$ \\
+    $\implies$ iz $h_s(i \alpha) = 0$ sledi $p_{lih}(i \alpha) = 0 in g_{\lambda}(i \alpha) = 0$ \\
+    $\implies p_{sod}(i \alpha) = 0$ \\
+    $\implies \text{ za } \forall \lambda \text{ je } h_{\lambda}(i \alpha) = 0$. \\
+    (Podobno: če je $\alpha$ $k$-kratna ničla $h_{\lambda}$ za nek $\lambda$
+    $\implies$ $k$-kratna ničla za vsak $\lambda$.) \\
+    Ostane še $h_{\lambda}(0) = 0$ \\
+    $\implies p(0) = 0$ in spet $h_{\lambda}(0) = 0$ za vsak $\lambda$.
+\end{pro}
+Pogledamo situacijo pri $\lambda = 1-\varepsilon$, ko gre $\varepsilon \to 0$. \\
+$h_{1-\varepsilon}(x) = \varepsilon a_{0}x^n + a_1 x^{n-1} + \dots$ \\
+$\implies$ $h_{1-\varepsilon}(x)$ ima ničlo $\chi \approx - \frac{a_1}{\varepsilon a_0} \to \infty$
+ko gre $\varepsilon \to 0$. \\
+$x^n h_{1-\varepsilon}\left(\frac{1}{x}\right) = rev(h_{1-\varepsilon})(x)
+= a_n x^n + \dots + a_1 x + \varepsilon a_0$. \\
+Ko gre $\varepsilon \to 0$, gre ena ničla proti 0, v bližini pa je $\approx -\frac{\varepsilon a_0}{a_1}$. \\
+% skica
+Iz $-\infty$, ker $a_0 a_1 > 0$, $q$ stabilen: vsi levo, se ne premakne desno $\implies$ vse ničle $p$ levo. \\
+Ničla \sn{se pojavi}. \\
+--- \\
+$p_1(x_1, x_2 \dots x_n) = 0$ \\
+$p_n(x_1, x_2 \dots x_n) = 0$. \\
+Metode zveznega nadaljevanja - homostopske metode.
+$q_1(x_1, x_2 \dots x_n) = 0$ \\
+$q_n(x_1, x_2 \dots x_n) = 0$. \\
+$H(\lambda, x) = (1-\lambda) Q(x) + \lambda P(x)$ \\
+$H(0, x) = Q(x)$ \\
+$H(1, x) = P(x)$. \\
+% skica
+Rešimo npr. z Newtonovo metodo.
+% skica
+\begin{exmp} \text{} \\
+    $g(s) = s^3 + 4s^2 + ks + 8$. \\
+    Za kakšne vrednosti $k$ je sistem stabilen?
+    \begin{center}
+        \begin{tabular}{c | c c}
+            & & \\
+            \hline
+            0 & 1 & $k$ \\
+            1 & 4 & 8 \\
+            2 & $k-2$ & \\
+            3 & 8
+        \end{tabular}
+    \end{center}
+    $\implies \; g$ bo stabilen $\iff \; k > 2$.
+\end{exmp}
+
+
+\section{Napaka ustaljenega stanja}
+
+Imamo sistem z referenčnim vhodom in povratno zanko. \\
+% skica
+$r(t)$: referenčni vhod (želena vrednost), npr. hitrost, temperatura, \\
+$y(t)$: izhod (dejanska vrednost), \\
+$e(t) = r(t) - y(t)$: razlika, odstopanje \\
+$Y(s) = G(s) E(s) = G(s) (R(s) - Y(s)) \implies Y(s) = \frac{G(s)}{1+G(s)} R(s)$ \\
+$E(s) = R(s) - Y(s) = \frac{1}{1+Y(s)} R(s)$. \\
+Napaka ustaljenega stanja (steady-state error) je limita $e(t)$, ko gre \\
+$t \to \infty$.
+\begin{equation*}
+    e_{ss} := \lim_{t \to \infty} e(t) = \lim_{s \to 0} s E(s) =
+    \lim_{s \to 0} \frac{s R(s)}{1+Y(s)};
+\end{equation*}
+2. enakost velja zaradi izreka o končni vrednosti, če limita obstaja. \\
+Za večino sistemov zadošča, da poznamo napako ustaljenega stanja za
+\begin{enumerate}[label=\alph*)]
+    \item enotsko stopnico $r(t) = u_s(t), R(s) = \frac{1}{s} \implies e_{ss1}$
+    \item enotsko rampo (unit ramp) $r(t) = t u_s(t), R(s) = \frac{1}{s^2} \implies e_{ss2}$
+    \item enotsko parabolo $r(t) = \frac{1}{2} t^2 u_s(t), R(s) = \frac{1}{s^3} \implies e_{ss3}$.
+\end{enumerate}
+% skica
+Pravimo, da je sistem tipa $r$, če ima $G(s)$ pol stopnje $r$ pri $s=0$
+(po krajšanju števca in imenovalca).
+Večina sistemov je tipa 0,1,2.
+Tip operacij, da $G(s)$ nima pola pri $s = 0$.
+\begin{enumerate}[label=\alph*)]
+    \item Enotska stopnica, $R(s) = \frac{1}{s}$ \\
+        $e_{ss0} = \lim_{s \to 0} \frac{s \frac{1}{s}}{1+G(s)} =
+        \lim_{s \to 0} \frac{1}{1+G(s)} = \frac{1}{1+K_p}$ \\
+        $K_p := \lim_{s \to 0} G(s)$: konstanta napake položaja. \\
+        Če je sistem tipa 0 $\implies$ $K_p$ je končen, $\implies e_{ss0} = \frac{1}{1+K_p}$, \\
+        če je sistem tipa $\geq 1 \; \implies$ $K_p = \infty$, $\implies e_{ss0} = 0$. \\
+        Tip pomeni število idealnih integratorjev, ki jih vsebuje sistem (šibka vezava).
+        % skica
+    \item Enotska rampa, $R(s) = \frac{1}{s^2}$ \\
+        $e_{ss1} = \lim_{s \to 0} \frac{s \frac{1}{s^2}}{1+G(s)} =
+        \lim_{s \to 0} \frac{1}{s+sG(s)} = \frac{1}{K_v}$ \\
+        $K_v := \lim_{s \to 0} s G(s)$: konstanta napake hitrosti. \\
+        Če je sistem tipa 0 $\implies \; K_v = 0$, $\implies e_{ss1} = \infty$, \\
+        če je sistem tipa 1 $\implies \; K_v$ končen, $\implies e_{ss1} = \frac{1}{K_v}$, \\
+        če je sistem tipa $\geq 2 \; \implies \; K_v = \infty$, $\implies e_{ss1} = 0$, \\
+    \item Enotska parabola, $R(s) = \frac{1}{s^3}$ \\
+        $e_{ss2} = \lim_{s \to 0} \frac{s \frac{1}{s^3}}{1+G(s)} =
+        \lim_{s \to 0} \frac{1}{s^2+s^2 G(s)} = \frac{1}{K_a}$ \\
+        $K_a := \lim_{s \to 0} s^2 G(s)$: konstanta napake pospeška. \\
+        Če je sistem tipa $\leq 1 \; \implies \; K_a = 0$, $\implies e_{ss2} = \infty$, \\
+        če je sistem tipa 2 $\implies \; K_v$ končna, $\implies e_{ss2} = \frac{1}{K_a}$.
+\end{enumerate}
+\begin{center}
+    \begin{tabular}{c | c c c |c c c}
+        tip & $K_p$ & $K_v$ & $K_a$ & $e_{ss0}$ & $e_{ss1}$ & $e_{ss2}$ \\
+        \hline
+        0 & $K_p$ & 0 & 0 & $\frac{1}{1+K_p}$ & $\infty$ & $\infty$ \\
+        1 & $\infty$ & $K_v$ & 0 & 0 & $\frac{1}{K_v}$ & $\infty$ \\
+        2 & $\infty$ & $\infty$ & $K_a$ & 0 & 0 & $\frac{1}{K_a}$ \\
+    \end{tabular}
+\end{center}
+% skica
+MO: maksimalni prevzpon (maximal overshoot) - najjvečje odstopanje v prehodni fazi, \\
+ST: čas izravnave (setting time) - od kod naprej je napaka < 5\% (< 2\%), \\
+RT: čas vzpona (rise time): od 10\% do 90\%, \\
+DT: čas zakasnitve (delay time): od 0\% do 50\%.
+
+
+\section{PID regulator}
+
+% skica
+$e(t) = y(t) - r(t)$. \\
+Regulator na podlagi napake (odstopanja) $e(t)$ pripravi vhod $u(t)$ na sistem
+s ciljem da gre $e(t) \stackrel{t \to \infty}{\longrightarrow} 0$. \\
+Prva ideja: dvopoložajno vodenje (on-off control)
+\begin{equation*}
+    u(t) \begin{cases}
+        u_{max}: \; e(t) \geq 0 \\
+        u_{min}: \; e(t) < 0
+    \end{cases}
+\end{equation*}
+Težave:
+\begin{itemize}
+    \item oscilacije,
+    \item pogosto vklapljanje in izklapljanje.
+\end{itemize}
+Izboljšava: vpeljemo mrtvo cono (dead zone)
+\begin{equation*}
+    u(t) \begin{cases}
+        u_{max}: \; &e(t) > \varepsilon \\
+        u_{min}: \; &e(t) < -\varepsilon \\
+        0 &\text{sicer}.
+    \end{cases}
+\end{equation*}
+Proporcionalno vodenje:
+\begin{equation*}
+    u(t) = K_p \cdot e(t).
+\end{equation*}
+$K_p$: koeficient proporcionalnega vodenja (proportional gain). \\
+Težava: $e_{ss0} = \frac{1}{1+K_p}$. \\
+Integrirano vodenje:
+\begin{align*}
+    &u(t) K_i \cdot \int_0^t e(\tau) d\tau, \\
+    &C(s) = \frac{K_i}{s}.
+\end{align*}
+% skica
+PI (proporcionalno-integrirno vodenje): \\
+$C(s) = K_p + \frac{K_i}{s}$. \\
+Diferencirno vodenje \\
+\begin{equation*}
+    u(t) = K_d \cdot e(t).
+\end{equation*}
+PID (proporcionalno-integrirno-diferencirno vodenje): \\
+$C(s) = K_p + \frac{K_i}{s} + K_d s =
+\frac{1}{s} \left( K_i + K_p s + K_d s^2\right)$. \\
+% skica
+PID regulator, \\
+$G(s)$: sistem.
+
+
+
 %\clearpage
 %\phantomsection
 
