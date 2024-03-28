@@ -1450,6 +1450,244 @@ $= u(t)$.
 \end{enumerate}
 
 
+% 6. predavanje: 26.3.
+
+\section{Numerične metode za $e^{At}$}
+
+$e^{At} = \sum_{k=0}^{\infty} \frac{(At)^k}{k!}$ vedno konvergira, \\
+$A \in \R^{n \times n}, t \geq 0$ (za naše potrebe). \\
+Osnovne lastnosti:
+\begin{enumerate}[label=\arabic*)]
+    \item $e^{A(t+s)} = e^{At} \cdot e^{As}$
+    \item $det \left( e^{At} \right) \neq 0$
+    \item $\left( e^{At} \right)^{-1} = e^{-At}$
+    \item $det P \neq 0 \implies e^{P A P^{-1} t} = P e^{At} P^{-1}$
+    \item $\frac{d}{dt} \left( e^{At} \right) = A e^{At} = e^{At} A$
+    \item $e^{(A+B) t} = e^{At} \cdot e^{Bt} \iff A, B$ komutirata \\
+        $(\Leftarrow)$: očitno \\
+        $(\Rightarrow)$: razvoj se mora ujemati pri vseh potencah $t$. \\
+            Pri $t^2$ dobimo
+            \begin{align*}
+                \frac{(A+B)^2}{2} &= \frac{A^2}{2} + AB + \frac{B^2}{2} \\
+                \frac{A^2 + AB + BA + B^2}{2} &= \\
+                \iff AB &= BA.
+            \end{align*}
+\end{enumerate}
+Večina metod bo uporabnih tudi za izračun $f(A)$, kjer je $f$ splošna funkcija,
+definirana v lastnih vrednostih $A$ plus ustrezno število odvodov in veljati mora
+\begin{enumerate}[label=\arabic*)]
+    \item $A f(A) = f(A) A$
+    \item $det P \neq 0 \implies f(P A P^{-1}) = P f(A) P^{-1}$.
+\end{enumerate}
+
+\subsection{Občutljivost}
+
+Zanima nas, kako se lahko $e^{(A+E)t}$ razlikuje od $e^{At}$ za majhen $t$. \\
+$\frac{|| e^{(A+E)t} - e^{At}||}{||e^{At}||} \leq ? \frac{||E||}{||A||}$; \\
+Leva stran: $\phi(A, E, t)$, ?: $\mu(A, t) (m?) :=$ občutljivost. \\
+$\mu(A, t) = \lim_{\varepsilon \to 0} \sup_{||E|| < \varepsilon}
+    \frac{|| e^{(A+E)t} - e^{At}|| \cdot ||A||}{||e^{At}|| \varepsilon}$.
+\begin{enumerate}[label=\alph*)]
+    \item $AE = EA$ \\
+        $\implies e^{(A+E)t} - e^{At} = e^{At} (e^{Et} - I) = e^{At} E t \sum_{k=0}^{\infty} \frac{(Et)^k}{(k+1)!}$ \\
+        $\implies \phi(A, E, t) \leq ||E|| t \sum_{k=0}^{\infty} \frac{||E||^k t^k}{(k+1)!} \leq ||E|| \cdot t e^{||E|| t}$ \\
+        $\implies \mu(A, t) = ||A|| t$
+    \item $AE \neq EA$ \\
+        $e^{At}$ je rešitev $x^{.}(t) = Ax(t)$, $x(0) = I$, \\
+        $e^{(A+E)t}$ je rešitev $y^{.}(t) = (A+E)y(t)$, $y(0) = I$. \\
+        Naj bo $z(t) = y(t) - x(t)$.
+        Velja \\
+        $z^{.}(t) = Az(t) + Ey(t), z(0) = 0$ - enačba stanja. \\
+        Uporabimo formulo za rešitev enačbe stanja sistema in dobimo
+        \begin{equation*}
+            z(t) = \int_0^t e^{A(t-s)} E^{(A+E)s} ds \stackrel{\text{Če je} ||E|| < 1}{\longeq{30px}}
+            \int_0^t e^{A(t-s)} E e^{As} ds + O \left( ||E||^2 \right)
+        \end{equation*}
+        $\implies \mu(A, t) = \lim_{\varepsilon \to 0} \sup_{||E|| < \varepsilon}
+        \frac{|| \int_0^t e^{A(t-s)} E e^{As} ds || \cdot ||A||}{|| e^{At} || \varepsilon}
+        = \max_{||E|| = 1} \frac{|| \int_0^t e^{A(t-s)} E e^{As} ds || \cdot ||A||}{|| e^{At} ||}$. \\
+        Če vzamemo $E = 1$ \\
+        $\implies \mu(A, t) \geq \frac{|| \int_0^t e^{At} ds || \cdot ||A||}{|| e^{At} ||} = ||A|| \cdot t$. \\
+        Izkaže se: če je matrika $A$ normalna: $A A^T = A^T A$, je $\mu(A, t) = ||A|| \cdot t$,
+        sicer pa lahko dobimo polinom $t$.
+\end{enumerate}
+
+\subsection{Ocene za $e^{At}$}
+
+\begin{enumerate}[label=\alph*)]
+    \item Iz Taylorjeve vrste sledi $|| e^{At} || \leq e^{||A|| t}$ (za $t \geq 0$). \\
+        Ocena je praktična, če je $\alpha(A) = \max (Re(\lambda): \lambda \in \sigma(A)) < 0$, \\
+        $\to$ sprektralna abscisa \\
+        saj je potem $\lim_{t \to \infty} e^{At} = 0, \; \lim_{t \to \infty} e^{||A|| t}$ pa je $\infty$.
+    \item Dahlquistova ocena $|| e^{At} || \leq e^{u(A) t}$; \\
+        $u(A) = \max \{u: u \in \sigma\left( \frac{1}{2} (A^T + A) \right)\}$. \\
+        Običajno boljša od a), ampak še vedno je možno, da je $\mu(A) > 0$, čeprav je $\alpha(A) < 0$.
+    \item Uporabimo Jordanovo formo: to je tudi metoda za izračun $e^{At}$ (deluje tudi za splošno $f(A)$). \\
+        $A = X J X^{-1},
+        J = \begin{bmatrix}
+            J_1 & & & \\
+            & J_2 & & \\
+            & & \ddots & \\
+            & & & J_k
+        \end{bmatrix}, \\
+        J_i = \begin{bmatrix}
+            \lambda_i & 1 & & \\
+            & \lambda_i & 1 & \\
+            & & \ddots & 1 \\
+            & & & \lambda_i
+        \end{bmatrix} n_i \times n_i, \; \sum_{i=1}^{k} n_i = n$. \\
+        $e^{J_i \cdot t} = e^{\lambda_i t} \begin{bmatrix}
+            1 & t & \frac{t^2}{2} & \dots & \frac{t^{n_i-1}}{(n_i-1)!} \\
+            0 & 1 & t & \dots & \frac{t^{n_i-2}}{(n_i-2)!} \\
+            \vdots & \vdots & \vdots & \ddots & \vdots \\
+            0 & 0 & 0 & \dots & 1
+        \end{bmatrix}$ \\
+        $\implies e^{At} = X e^{Jt} X^{-1} = X \begin{bmatrix}
+            e^{J_1 t} & & & \\
+            & e^{J_2 t} & & \\
+            & & \ddots & \\
+            & & & e^{J_k t}
+        \end{bmatrix} X^{-1}$. \\
+        Uporabimo oceno $||A||_2 \leq n \cdot N_{\infty}(A)$; \\
+        $N_{\infty}(A) = \max_{i,j} |A_{ij}|$. \\
+        Dobimo oceno $|| e^{At} || \leq ||X|| \cdot ||X^{-1}|| \cdot e^{\alpha(A) t}
+        \max_{1 \leq j \leq n_{max}-1} \left(\frac{t^j}{j!}\right)$; \\
+        $||X|| \cdot ||X^{-1}||$ je lahko zelo veliko.
+    \item Schurova forma: $A = U R U^H$, $U$ unitarna, $R$ zgornja trikotna. \\
+        $R = D + N$; \\
+        $D = diag(\lambda_1, \lambda_2 \dots \lambda_n), N$ nilpotentna: $N^n = 0$ \\
+        $\implies e^{\alpha(A) t} \leq ||e^{At}||_2 \leq e^{\alpha(A) t}
+        \sum_{k=0}^{n-1} \frac{||Nt||_2^k}{k!}$; \\
+        $\sum_{k=0}^{n-1} \frac{||Nt||_2^k}{k!}$ - odstopanje od normalnosti. \\
+        Če je $\alpha(A) < 0: e^{\alpha(A) t}$ pada eksponentno, $\sum \dots$ narašča polinomsko. \\
+        % skica
+        Prehodno obdobje, grba.
+\end{enumerate}
+\begin{exmp} \text{} \\
+    $A = \begin{bmatrix} -1 & M \\ & -1\end{bmatrix} \implies e^{At} = e^{-t}
+    \begin{bmatrix} 1 & tM \\ & 1 \end{bmatrix}$.
+\end{exmp}
+
+\subsection{Diagonalizacija (tudi za splošno $f(A)$)}
+
+$A = X D X^{-1}, D = diag(\lambda_1 \dots \lambda_n)$ \\
+$\implies e^{At} = X diag\left(e^{\lambda_1} \dots e^{\lambda_n}\right) X^{-1}$. \\
+Težave:
+\begin{itemize}
+    \item ni nujno, da lahko $A$ diagonaliziramo,
+    \item v praksi lahko vedno, a je potem $K_2(x)$ zelo velika.
+\end{itemize}
+Ocena: $|| f(e^{At}) - e^{At}||_2 \leq n \cdot u \cdot e^{\rho(A) t} K_2(x)$; \\
+$\rho(A) = \max \{|\lambda|: \lambda \in \sigma(A)\}$: spektralni radij.
+\begin{exmp} \text{} \\
+    $A = \begin{bmatrix} \lambda & \alpha \\ & \mu \end{bmatrix}
+    \implies e^{At} = \begin{bmatrix} e^{\lambda t} & \xi \\ & e^{\mu t}\end{bmatrix}, \lambda \neq \mu$. \\
+    $\xi$ dobimo iz zveze $A e^{At} = e^{At} A:$
+    \begin{align*}
+        &\lambda \xi + \alpha e^{\mu t} = \alpha e^{\lambda t} + \mu \xi \\
+        \implies &\xi = \frac{\alpha e^{\lambda t} - \alpha e^{\mu t}}{\lambda - \mu}
+        \stackrel{\mu \to \lambda}{\longrightarrow} \alpha \cdot t e^{\lambda t}.
+    \end{align*}
+\end{exmp}
+
+\subsection{Schur-Parlettova metoda}
+
+$A \in \R^{n \times n} \implies A = Q R Q^T$; \\
+$Q$ ortogonalna, $R$ kvazi zgornja trikotna. \\
+(Možni so $2 \times 2$ diagonalni bloki v primeru kompleksnih lastnih vrednosti). \\
+Za začetek predpostavimo, da je $R$ zgornja trikotna in so vsi diagonalni elementi paroma različni. \\
+$f(A) = Q f(R) Q^T, f(R)$ je tudi zgornja trikotna, diagonalni elementi so $f(r_{11}) \dots f(r_{nn})$. \\
+$f(e^{At}) = Q e^{Rt} Q^T, e^{Rt} = \begin{bmatrix}
+    e^{r_{11} t} & \dots & & \\
+    & e^{r_{22} t} & \dots & \\
+    & & \ddots & \vdots \\
+    & & & e^{r_{nn} t}
+\end{bmatrix}$. \\
+Upoštevamo, da velja $R f(R) = f(R) R$ in tako izračunamo ostale elemente $f(R)$ po diagonalah. \\
+% skica
+$S = f(R)$ \\
+$RS = SR$ \\
+% skica
+$i < j$: \\
+$\sum_{k=i}^j r_{ik} s_{kj} = \sum_{k=i}^j s_{ik} r_{kj}$ \\
+$\implies s_{ij} = \frac{1}{r_{ii} - r_{ij}} \left(\sum_{k=i}^{j-1} s_{ik} r_{kj} - \sum_{k=i+1}^{j} r_{ik} s_{kj} \right)$. \\
+Algoritem.
+\begin{enumerate}[label={}]
+    \item $i = 1 \dots n$
+    \begin{enumerate}[label={}]
+        \item $s_{ii} = f(r_{ii})$
+    \end{enumerate}
+    \item $p = 1 \dots n-1$
+    \begin{enumerate}[label={}]
+        \item $i = 1 \dots n-p$
+        \item $j = i+p$
+        \item $s_{ij} = \frac{1}{r_{ii} - r_{ij}} \left( \sum - \sum \right)$:
+    \end{enumerate}
+\end{enumerate}
+$\frac{2}{3} n^3$ operacij + Schurova forma, \\
+$\frac{2}{3} n^3$ za izračun $f(R)$. \\
+Če ima matrika kompleksne ali večkratne (bližnje) lastne vrednosti, uporabimo bločno obliko algoritma. \\
+$R, S =$
+% skica
+$R \; m \times m$ bločna matrika, enako $S$. \\
+\begin{enumerate}[label={}]
+    \item $i = 1 \dots m$
+    \begin{enumerate}[label={}]
+        \item $s_{ii} = f(r_{ii})$
+    \end{enumerate}
+    \item $p = 1 \dots m-1$
+    \begin{enumerate}[label={}]
+        \item $i = 1 \dots m-p$
+        \item $j = i+p$
+        \item izračunamo $s_{ij}$ iz enačbe
+        \item $R_{ii} S_{ij} - S_{ij} R_{jj} = \sum_{k=1}^{j-1} S_{ik} R_{kj} - \sum_{k=i+1}^j R_{ik} S_{kj}$:
+            Sylvesterjeva matrična enačba.
+    \end{enumerate}
+\end{enumerate}
+$AX - XB = C$; \\
+$A, B$ kvadratni, $C, X$ ustreznih dimenzij. \\
+Rešljivo $\iff \; \sigma(A) \cap \sigma(B) = \emptyset$ ($A$ in $B$ nimata skupne lastne vrednosti).
+
+\subsection{Taylorjeva vrsta}
+
+$e^{At}$ aproksimiramo z $T_k(At) = \sum_{j=0}^k \frac{(At)^j}{j!}$. \\
+Npr. seštevamo, dokler ni razlika med $T_k(At)$ in $T_{k+1}(At)$ dovolj majhna:
+\begin{itemize}
+    \item počasna konvergenca,
+    \item lahko velike napake kadar imamo veliko grbov.
+\end{itemize}
+$e^{-10} = \frac{1}{e^{10}}$.
+
+\subsection{Padejeva aproksimacija}
+
+\begin{defn}
+    Za dano $f \in C^{p+q+1}$ v okolici $0$ ima Padejeva aproksimacija $(p,q)$ obliko
+    $r(x) = \frac{a_0 + a_1 x + \dots + a_p x^p}{1 + b_1 x + \dots + b_q x^q}$, kjer velja \\
+    $r(0) = f(0), r^{'}(0) = f^{'}(0) \dots r^{p+q}(0) = f^{(p+q)}(0)$.
+\end{defn}
+Pade$(p,0)$ je Taylorjev poliniom stopnje $p$. \\
+Če bi $r(x)$ razvili v Taylorjevo vrsto, je $f(x) - r(x) = O\left( x^{p+q-1} \right)$
+(vsi členi do vključno $x^{p+q}$ se pokrajšajo). \\
+Za $e^A$ poznamo eksplicitno formulo za $R_{pq}(A) = (D_{pq}(A))^{-1} N_{pq}(A)$,
+smiselno je vzeti $p = q$: \\
+$D_{pp}(A) = \sum_{j=0}^{p} \frac{(2p-j)! p!}{(2p)! (p-j)!} (-A)^j = \sum_{j=0}^{p} b_j (-A)^j$, \\
+$N_{pp}(A) = \sum_{j=0}^p b_j A^j$. \\
+Npr. pri $p=3$: \\
+$e^x \approx \frac{1 + \frac{1}{2} x + \frac{1}{10} x^2 + \frac{1}{120} x^3}
+    {1 - \frac{1}{2} x + \frac{1}{10} x^2 - \frac{1}{120} x^3}$. \\
+Napaka: $e^A - R_{pq}(A) = \frac{(-1)^p}{(2p)!} A^{2p+1} D_{pq}(A)^{-1} \int_0^1 u^p (1-p)^p e^{Au} du$. \\
+Dobra aproksimacija blizu izhodišča. \\
+Potem:
+\begin{enumerate}[label=\arabic*)]
+    \item $\widetilde{A} = 2^{-k} A$, kjer je $|| 2^{-k} A ||$ dovolj majhno,
+    \item $B = R_{pp}\left(\widetilde{A}\right)$ \\
+        $\left(e^{\frac{1}{m} A}\right)^m = e^A$ \\
+        $\implies$
+    \item $e^A = B^{2^k}$ - $k$ kvadriranj.
+\end{enumerate}
+
+
+
 %\clearpage
 %\phantomsection
 
